@@ -21,15 +21,17 @@ public class HibernateConfig {
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setPackagesToScan("com.qintess.comercio.model");
 		sessionFactory.setHibernateProperties(hibernateProperties());
+		
 		return sessionFactory;
 	}
-
+	
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setUrl("jdbc:postgresql://localhost/comercio");
-		dataSource.setUsername("postgres");
+		// os dados de user e pass precisam ser o de vocês!!!
+		dataSource.setUsername("postgres"); 
 		dataSource.setPassword("admin");
 		return dataSource;
 	}
@@ -38,16 +40,16 @@ public class HibernateConfig {
 	public HibernateTransactionManager getTransactionManager() {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(sessionFactory().getObject());
+		
 		return transactionManager;
 	}
 	
 	private final Properties hibernateProperties() {
 		Properties hibernateProperties = new Properties();
-		hibernateProperties.setProperty("hibernate.hbm2dll.auto", "create-drop");
+		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
 		hibernateProperties.setProperty("hibernate.show_sql", "true");
-		hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
-		return hibernateProperties;	
+		
+		return hibernateProperties;
 	}
-	
 }

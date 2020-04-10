@@ -1,51 +1,40 @@
 package com.qintess.comercio.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.Table;
+
 
 @Entity
+@Table(name = "produtos")
 public class Produto {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@Column(nullable = false)
 	private String nome;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, name = "valor_unitario")
 	private BigDecimal valorUnitario;
-	
+
 	@Lob
-	@Column(columnDefinition="mediumblob")
+	@Column(columnDefinition = "oid")
 	private byte[] imagemProd;
 	
-	@Transient //esse campo não será persistido no hibernate
-	private String imagemEncoded;
-	
-	@Column(nullable = true, length = 2000)
-	private String descricao;
-	
-	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<CompraProduto> compras = new ArrayList<CompraProduto>();
-
-	public List<CompraProduto> getCompras() {
-		return compras;
+	public byte[] getImagemProd() {
+		return imagemProd;
 	}
 
-	public void setCompras(List<CompraProduto> compras) {
-		this.compras = compras;
+	public void setImagemProd(byte[] imagemProd) {
+		this.imagemProd = imagemProd;
 	}
 
 	public int getId() {
@@ -71,30 +60,12 @@ public class Produto {
 	public void setValorUnitario(BigDecimal valorUnitario) {
 		this.valorUnitario = valorUnitario;
 	}
-	
-	public byte[] getImagemProd() {
-		return imagemProd;
+
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", nome=" + nome + ", valorUnitario=" + valorUnitario + "]";
 	}
 
-	public void setImagemProd(byte[] imagemProd) {
-		this.imagemProd = imagemProd;
-	}
-	
-	public String getImagemEncoded() {
-		return imagemEncoded;
-	}
-
-	public void setImagemEncoded(String imagemEncoded) {
-		this.imagemEncoded = imagemEncoded;
-	}
-	
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
 
 	
 }

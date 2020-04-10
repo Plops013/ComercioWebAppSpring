@@ -3,6 +3,7 @@ package com.qintess.comercio.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
@@ -28,7 +29,7 @@ public class GenericDao<T, ID extends Serializable> {
 	@Transactional
 	public T persistir(T entidade) {
 		Session session = sessionFactory.getCurrentSession(); 
-		session.save(entidade);
+		session.persist(entidade);
 		return entidade;
 	}
 	
@@ -48,7 +49,8 @@ public class GenericDao<T, ID extends Serializable> {
 	@Transactional
 	public List<T> encontrarTodos(Class<T> persistedClass){
 		Session session = sessionFactory.getCurrentSession(); 
-		CriteriaQuery<T> query = session.getCriteriaBuilder().createQuery(persistedClass);
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<T> query = builder.createQuery(persistedClass);
 		query.from(persistedClass);
 		return session.createQuery(query).getResultList();
 	}
