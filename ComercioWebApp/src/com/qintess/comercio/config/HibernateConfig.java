@@ -21,7 +21,6 @@ public class HibernateConfig {
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setPackagesToScan("com.qintess.comercio.model");
 		sessionFactory.setHibernateProperties(hibernateProperties());
-		
 		return sessionFactory;
 	}
 	

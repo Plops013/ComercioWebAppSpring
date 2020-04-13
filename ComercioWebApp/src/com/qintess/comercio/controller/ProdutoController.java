@@ -25,11 +25,16 @@ public class ProdutoController {
 
 	@RequestMapping("")
 	public String carrega(Model model) {
-
-
 		model.addAttribute("produtos", dao.encontrarTodos(Produto.class));
 		model.addAttribute("produto", new Produto());
 		return "/produto/Create";
+	}
+	
+	@RequestMapping("/{id}")
+	public String show(@PathVariable(name="id") int id, Model model) {
+		Produto produto = dao.encontrarPorId(Produto.class,  id);
+		model.addAttribute("produto", produto);
+		return "/produto/Index";
 	}
 
 	@RequestMapping("/salva")
@@ -37,12 +42,9 @@ public class ProdutoController {
 			RedirectAttributes redirectAttributes,
 			@RequestParam(required = false, value="imagem") MultipartFile imagem
 			) {
-		try {
-			System.out.println(imagem);
-			byte[] bImagem;
+			try {
 			if(imagem != null && imagem.getSize() > 0) {
-				bImagem = imagem.getBytes();
-				produto.setImagemProd(bImagem);
+				produto.setImagemProd(imagem.getBytes());
 			}
 			if(produto.getId() == 0) {
 				dao.persistir(produto);
@@ -71,10 +73,9 @@ public class ProdutoController {
 			byte[] encodeBase64 = Base64.getEncoder().encode(produto.getImagemProd());
 			String base64Encoded;
 			base64Encoded = new String(encodeBase64, "UTF-8");
-
 			model.addAttribute("produtos", dao.encontrarTodos(Produto.class));
 			model.addAttribute("produto", produto);
-			model.addAttribute("imagemProd", base64Encoded);
+			model.addAttribute("imagem64", base64Encoded);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			redirectAttributes.addFlashAttribute("mensagemErro", "Erro Grave: " + e.getMessage());

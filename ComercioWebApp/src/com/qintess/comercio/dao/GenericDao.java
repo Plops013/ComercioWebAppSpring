@@ -20,7 +20,6 @@ public class GenericDao<T, ID extends Serializable> {
 	@Autowired
 	SessionFactory sessionFactory;
 	
-	// List<Produto>
 	protected Session session;
 	
 	public GenericDao() {

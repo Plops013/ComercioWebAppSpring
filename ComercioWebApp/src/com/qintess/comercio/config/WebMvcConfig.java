@@ -13,7 +13,8 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.qintess.comercio.controller",
-							   "com.qintess.comercio.dao"})
+							   "com.qintess.comercio.dao", 
+							   "com.qintess.comercio.util"})
 public class WebMvcConfig implements WebMvcConfigurer{
 	
 	@Bean
@@ -33,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(100000); //Tamanho maximo do upload
+		multipartResolver.setMaxUploadSize(300000); //Tamanho maximo do upload
 		return multipartResolver;
 	}
 }
