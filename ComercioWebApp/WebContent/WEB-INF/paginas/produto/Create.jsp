@@ -5,6 +5,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+    <script>
+    $(function(){
+        var settings = {
+                type: 'json',
+                filelimit: 1,
+                allow: '*.(jpg|jpeg|png)'
+        };
+        
+        var select = UIkit.uploadSelect($("#upload-select"), settings),
+            drop = UIkit.uploadDrop($("#upload-drop"), settings);
+    })
+    </script>
 <head>
 <meta charset="UTF-8">
 <title>Cadastro de Produto</title>
@@ -12,6 +24,7 @@
 <spring:url value="/produto/altera/" var="altera"></spring:url>
 <spring:url value="/produto/salva" var="salva"></spring:url>
 <spring:url value="/produto/" var="cancela"></spring:url>
+ <link rel="stylesheet" href='<spring:url value="/resources/css/upload.min.css"/>' />
 <link href='<spring:url value="/resources/css/bootstrap.css"/>'
 	rel="stylesheet" />
 <link href='<spring:url value="/resources/css/style.css"/>'
@@ -20,6 +33,8 @@
 	src='<spring:url value="/resources/js/jquery-3.4.1.min.js"/>'></script>
 <script type="text/javascript"
 	src='<spring:url value="/resources/js/bootstrap.js"/>'></script>
+	<script src='<spring:url value="/resources/js/uikit.min.js"/>'></script>
+<script src='<spring:url value="/resources/js/upload.min.js"/>'></script>
 </head>
 <body class="bg-dark" id="produto">
 	<jsp:include page="${request.contextPath}/nav"></jsp:include>
@@ -34,10 +49,9 @@
 			</div>
 			<div class="col-lg-9">
 				<div class="card mx-auto">
-					<form:form class="form-horizontal" action="${salva}"
+					<form:form class="form-horizontal" method="POST" action="${salva}"
 						modelAttribute="produto" enctype="multipart/form-data">
-						<h2 class="display-4 text-center mt-3">Cadastro de
-							Produtos</h2>
+						<h2 class="display-4 text-center mt-3">Cadastro de Produtos</h2>
 						<div class="card-body">
 							<c:if test="${not empty mensagemErro}">
 								<div id="divMensagem" class="alert alert-danger" role="alert">
@@ -55,16 +69,14 @@
 								<div class="form-group form-row">
 									<label for="nome" class=" col-sm-2 col-form-label text-right">Nome</label>
 									<div class="col-sm-4">
-										<form:input class="form-control" path="nome"
-											value="${produto.nome}" />
+										<form:input class="form-control" path="nome" />
 									</div>
 								</div>
 								<div class="form-group form-row">
 									<label class=" col-sm-2 col-form-label text-right"
 										for="valorUnitario">Valor Unitario</label>
 									<div class="col-sm-4">
-										<form:input cssClass="form-control" path="valorUnitario"
-											value="${produto.valorUnitario}" />
+										<form:input cssClass="form-control" path="valorUnitario" />
 									</div>
 								</div>
 								<div class="form-group form-row">
@@ -72,9 +84,22 @@
 										for="valorUnitario">Foto:</label>
 									<div class="arquivo col-sm-6">
 										<input type="file" name="imagem" class="form-control"
-											id="customFile" value="0"> <label
-											class="custom-file-label" for="customFile">Escolha
-											seu arquivo...</label>
+											id="customFile"> <label class="custom-file-label"
+											for="customFile">Escolha seu arquivo...</label>
+									</div>
+									
+									<div class="row">
+										<div class="form-group col-sm-12">
+											<label class="control-label">Foto</label>
+
+											<div id="upload-drop" class="bw-upload">
+												<i class="glyphicon glyphicon-cloud-upload"></i> <span>Arraste
+													a foto aqui ou</span> <a class="bw-upload-form-file">selecione
+													<input id="customFile" type="file"
+													accept=".jpg,.jpeg,.png" />
+												</a>
+											</div>
+										</div>
 									</div>
 								</div>
 								<c:if test="${produto.id ne 0}">

@@ -27,7 +27,7 @@
 			<div class="col-lg-3" id="lateral">
 				<div class="card mx-auto">
 					<div class="card-body">
-						<p>Aqui estamos en lo lateralo menudo</p>
+						<p>Aqui estamos en lo lateralo menudo ${usuario.nome} ${usuario.username}</p>
 					</div>
 				</div>
 			</div>

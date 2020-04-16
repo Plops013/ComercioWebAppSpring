@@ -1,8 +1,8 @@
 package com.qintess.comercio.model;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+//import java.math.BigInteger;
+//import java.security.MessageDigest;
+//import java.security.NoSuchAlgorithmException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public class Usuario {
 	private String nome;
 	@Column(nullable = false, length = 100)
 	private String email;
-	@Column(nullable = false, length = 32)
+	@Column(nullable = false, length = 100)
 	private String senha;
 	@ManyToOne
 	Papel papel;
@@ -32,24 +32,24 @@ public class Usuario {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
-		this.senha = criptografaSenha(senha);
+		this.senha = senha;
 		this.papel = papel;
 	}
 
-	public boolean comparaSenha(String senha) {
-		return (criptografaSenha(senha).equals(this.senha)) ? true : false;
-	}
-
-	private String criptografaSenha(String senha) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(senha.getBytes(), 0, senha.length());
-			return new BigInteger(1,md.digest()).toString(16);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	public boolean comparaSenha(String senha) {
+//		return (criptografaSenha(senha).equals(this.senha)) ? true : false;
+//	}
+//
+//	private String criptografaSenha(String senha) {
+//		try {
+//			MessageDigest md = MessageDigest.getInstance("MD5");
+//			md.update(senha.getBytes(), 0, senha.length());
+//			return new BigInteger(1,md.digest()).toString(16);
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 
 	public int getId() {
 		return id;
@@ -73,7 +73,7 @@ public class Usuario {
 		return senha;
 	}
 	public void setSenha(String senha) {
-		this.senha = criptografaSenha(senha);
+		this.senha = senha;
 	}
 	public Papel getPapel() {
 		return papel;

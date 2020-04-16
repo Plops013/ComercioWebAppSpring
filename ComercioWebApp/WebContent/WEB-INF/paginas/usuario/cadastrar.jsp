@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,8 +65,9 @@
 								</div>
 							</div>
 							<div class="mx-auto text-center">
-							<button type="submit" class="btn btn-success">Cadastrar-se</button>
-							<button type="reset" class="btn btn-danger">Limpar Formulario</button>
+								<button type="submit" class="btn btn-success">Cadastrar-se</button>
+								<button type="reset" class="btn btn-danger">Limpar
+									Formulario</button>
 							</div>
 						</form:form>
 					</div>
@@ -73,7 +75,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div id="modalTermos" class="modal fade" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -92,5 +93,5 @@
 			</div>
 		</div>
 	</div>
-</body>
+	</body>
 </html>

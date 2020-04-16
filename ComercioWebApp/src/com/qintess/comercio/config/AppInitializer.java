@@ -10,14 +10,15 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	@Override
 	protected Class<?>[] getRootConfigClasses() { //Configura componentes externos tipo hibernate
 		return new Class[] {
-				HibernateConfig.class
+				WebMvcConfig.class,
+				HibernateConfig.class,
+				SecurityConfig.class
 		};
 	}
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() { //Configura o mvc do spring
 		return new Class[] {
-				WebMvcConfig.class
 		};
 	}
 

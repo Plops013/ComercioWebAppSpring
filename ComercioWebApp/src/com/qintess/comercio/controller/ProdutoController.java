@@ -36,12 +36,11 @@ public class ProdutoController {
 		model.addAttribute("produto", produto);
 		return "/produto/Index";
 	}
-
 	@RequestMapping("/salva")
 	public String salva(@ModelAttribute Produto produto,
-			RedirectAttributes redirectAttributes,
-			@RequestParam(required = false, value="imagem") MultipartFile imagem
+			RedirectAttributes redirectAttributes, @RequestParam(required = false, value="imagem") MultipartFile imagem
 			) {
+			System.out.println("entrei no salva");
 			try {
 			if(imagem != null && imagem.getSize() > 0) {
 				produto.setImagemProd(imagem.getBytes());
@@ -50,7 +49,9 @@ public class ProdutoController {
 				dao.persistir(produto);
 				redirectAttributes.addFlashAttribute("mensagemSucesso", " Produto Cadastrado Com Sucesso! ");
 			} else {
+				System.out.println("tamanho da imagem atualizada: " + produto.getImagemProd().getClass().getSimpleName());
 				dao.atualizar(produto);
+				System.out.println("depois do dao " + produto.getNome());
 				redirectAttributes.addFlashAttribute("mensagemSucesso", " Produto Alterado Com Sucesso! ");	}
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("mensagemErro", "Erro Grave: " + e.getMessage());
@@ -70,15 +71,19 @@ public class ProdutoController {
 	public String carregaAltera(@PathVariable(name="id") int id, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			Produto produto = dao.encontrarPorId(Produto.class, id);
+			System.out.println("começo: " + produto.getImagemProd().getClass().getSimpleName());
 			byte[] encodeBase64 = Base64.getEncoder().encode(produto.getImagemProd());
 			String base64Encoded;
 			base64Encoded = new String(encodeBase64, "UTF-8");
 			model.addAttribute("produtos", dao.encontrarTodos(Produto.class));
 			model.addAttribute("produto", produto);
 			model.addAttribute("imagem64", base64Encoded);
-		} catch (UnsupportedEncodingException e) {
+				} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			redirectAttributes.addFlashAttribute("mensagemErro", "Erro Grave: " + e.getMessage());
+		}	catch (Exception e) {
+			redirectAttributes.addFlashAttribute("mensagemErro", "Erro Grave: " + e.getMessage());
+			System.out.println("merda grave");
 		}	
 		return "/produto/Create";
 	}

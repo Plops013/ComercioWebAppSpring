@@ -33,8 +33,10 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	//Aqui fazemos a config dos uploads
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
+		System.out.println("Entrei no multipart");
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		multipartResolver.setMaxUploadSize(300000); //Tamanho maximo do upload
+		System.out.println("sobrevivi o multipart");
 		return multipartResolver;
 	}
 }

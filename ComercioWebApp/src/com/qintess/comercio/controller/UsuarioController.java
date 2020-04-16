@@ -1,17 +1,19 @@
 package com.qintess.comercio.controller;
-
-//import java.util.Enumeration;
-//
-//import javax.servlet.ServletContext;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpSession;
-//import javax.servlet.http.HttpSessionContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qintess.comercio.dao.GenericDao;
 import com.qintess.comercio.model.Papel;
@@ -29,7 +31,15 @@ public class UsuarioController {
 	GenericDao<Papel, Integer> daoPapel;
 	
 	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
 	IniciaPapeis papeis;
+	
+	@RequestMapping("/login")
+	public String login(Model model) {
+		return "usuario/login";
+	}
 	
 	@RequestMapping("/cadastrar")
 	public String cadastrar(Model model) {
@@ -44,21 +54,42 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping("/salvar")
-	public String salvar(@ModelAttribute Usuario usuario){
+	public String registra(@ModelAttribute Usuario usuario,
+						   RedirectAttributes redirectAtt,
+						   HttpServletRequest req) {
+		
+		String senhaOriginal = usuario.getSenha();
+		try {
+			dao.encontrarTodos(Usuario.class)
+				.stream()
+				.filter(a -> a.getEmail().equals(usuario.getEmail()))
+				.findFirst()
+				.get();
+			redirectAtt.addFlashAttribute("mensagemErro", "Usu�rio j� cadastrado no sistema");
+			return "redirect:/login";
+		} catch (Exception e) {
+		}
+		
+		criaNovoCliente(usuario);
+		
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(usuario.getEmail(), senhaOriginal);
+	    authToken.setDetails(new WebAuthenticationDetails(req));
+	     
+	    Authentication authentication = authenticationManager.authenticate(authToken);
+	     
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+		return "redirect:/";
+	}
+	
+	private void criaNovoCliente(Usuario usuario) {
+		PasswordEncoder passEncoder = new BCryptPasswordEncoder();
+		String hashedPass = passEncoder.encode(usuario.getSenha());
+		usuario.setSenha(hashedPass);
 		usuario.setPapel(
 				(dao.encontrarPorId(Usuario.class, 1) != null)
 				? daoPapel.encontrarPorId(Papel.class, 2) 
 				: daoPapel.encontrarPorId(Papel.class, 1)) ;
-		usuario.setSenha(usuario.getSenha());
 		dao.persistir(usuario);
-		return "redirect:/";
 	}
-	
-//	@RequestMapping("/logar")
-//	public String login() {
-//		HttpSession sessao = new HttpServletRequest().getSession() ;
-//		sessao.setAttribute("logado", "sim");;
-//		return "/";
-//	}
-	
 }
